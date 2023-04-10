@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="<%= root_path %>">App Ud Presupuestos</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="<%= root_path(partial: 'dashboard') %>">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= root_path(partial: 'form') %>">Cargar documentos</a>
+        </li>
+        <li class="nav-item">
+          <%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete, data: {turbo: false, turbo_frame: "_top" }  %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,47 @@
+<% presupuesto_concepto = PresupuestoConcepto.new() %>
+<div class="w-lg-75 class_form">
+  <%= form_with(model: presupuesto_concepto, method: :post) do |f| %>
+    <div class="d-flex my-2 align-items-center ">
+      <%= f.file_field :file, id:"input-file", accept:".xls,.xlsx" %>
+      <label for="input-file" class="input-file-label">Seleccionar archivo</label>
+      <label id="file-info" class="file-info-label">Ningún archivo seleccionado</label>
+    </div>
+    <div class="d-flex justify-content-center">
+      <%= f.submit "Cargar", class: "button rounded-pill"%>
+    </div>
+    <div class="mt-4">
+      <p class="note py-1">Recuerde que las columnas válidas son: 
+        <strong> <em> 
+          codigo, concepto, presupuesto_inicial, adicion_modificacion_mes, adicion_modificacion_acumulado, presupuesto_definitivo, recaudo_mes, recaudo_acumulado, porcentaje_ejecucion, saldo_por_recaudar, fecha.
+        </em> </strong>
+      </p>
+      <p class="note py-1">El porcentaje escribirlo sin el signo '%' </p>
+      <p class="note py-1">El signo del punto decimal es '.'</p>
+      <p class="note py-1">No se admite el signo ',' de unidades. </p>
+      <p class="note py-1">Formato de fecha: '01-mm-aaaa'.</p>
+    </div>
+  <% end %>
+</div>
+<script>
+var inputFile = document.getElementById('input-file');
+var fileInfoLabel = document.getElementById('file-info');
+var allowedExtensions = ['xls', 'xlsx'];
+
+inputFile.addEventListener('change', () => {
+  const fileName = inputFile.value;
+  const fileExtension = fileName.split('.').pop();
+  if (!allowedExtensions.includes(fileExtension)) {
+    alert('Solo se permiten archivos de Excel');
+    fileInput.value = '';
+  } else {
+    const file = inputFile.files[0];
+    if (file) {
+      const fileSizeInMB = file.size / (1024 * 1024);
+      fileInfoLabel.textContent = `${file.name} (Excel/${fileExtension}) - ${fileSizeInMB.toFixed(2)} MB`;
+    } else {
+      fileInfoLabel.textContent = 'Ningún archivo seleccionado';
+    }
+  }
+});
+
+</script>

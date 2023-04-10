@@ -1,0 +1,27 @@
+<% content_for :left do %>
+  <div class="w-lg-75">
+   <h1>Universidad Distrital Francisco Jose de Caldas</h1>
+
+    <div class="d-grid gap-2">
+      <%= link_to "Iniciar Sesión",
+        new_user_session_path,
+        form_class: "d-grid",
+        class: "button rounded-pill",
+        "data-turbo": "false"
+      %>
+
+      <%= link_to "Registrarse",
+        new_user_registration_path,
+        form_class: "d-grid",
+        class: "button rounded-pill",
+        "data-turbo": "false"
+      %>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <div class="w-lg-75">
+    <%= image_tag("ud.png", class: "img-fluid") %>
+  </div>
+<% end %>

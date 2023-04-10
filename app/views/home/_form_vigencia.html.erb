@@ -1,0 +1,21 @@
+<% year_initial = 2010 %>
+<% year_now = Date.today.year %>
+<% array_years = (year_initial..year_now).to_a.reverse %>
+<% vigencia_ud = VigenciaUd.new() %>
+<div class="w-lg-75 class_form">
+  <%= form_with(model: vigencia_ud, method: :post) do |f| %>
+    <div class="d-flex align-items-center justify-content-center">
+      <%= f.label :anho_vigencia_ud, 'Año de Vigencia', class:"px-4" %>
+      <%= f.select :anho_vigencia_ud, options_for_select(array_years), {}, { class: 'select-class1 px-4' } %>
+      <%= f.submit "Crear", class: "button rounded-pill mx-2"%>
+    </div>
+  <% end %>
+</div>
+<script>
+$(document).ready(function() {
+  $('.select-class1').select2({
+    placeholder: 'Buscar opciones...',
+    noResultsText: 'No se encontraron resultados'
+  });
+});
+</script>

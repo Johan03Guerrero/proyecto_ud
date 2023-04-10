@@ -1,2 +1,24 @@
-# Proyecto de Grado -- Presupuestos de la Univesidad Distrital
-Proyecto de grado Universidad Distrital Francisco José de Caldas. 
+# README
+
+This README would normally document whatever steps are necessary to get the
+application up and running.
+
+Things you may want to cover:
+
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
