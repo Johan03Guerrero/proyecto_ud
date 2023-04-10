@@ -1,0 +1,8 @@
+<% classes = {notice: "info", warning: "warning", alert: "danger"} %>
+<%# alert-info, alert-success, alert-warning, alert-danger %>
+<% flash.each do |name, message| %>
+  <div class="alert alert-<%= classes[name.to_sym] %> alert-dismissible fade show" role="alert" data-controller="flash">
+    <%= message.html_safe %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" data-action="click->flash#dismiss"></button>
+  </div>
+<% end %>

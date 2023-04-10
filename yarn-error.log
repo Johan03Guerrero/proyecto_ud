@@ -1,0 +1,45 @@
+Arguments: 
+  /usr/local/bin/node /usr/share/yarn/bin/yarn.js add @hotwired/stimulus-loading
+
+PATH: 
+  ::/home/johanalernova/.rbenv/shims:/home/johanalernova/.rbenv/bin:/home/johanalernova/bin:::/home/johanalernova/.rbenv/shims:/home/johanalernova/.rbenv/bin:/home/johanalernova/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/johanalernova/.rvm/bin:/home/johanalernova/.rvm/bin:/home/johanalernova/.rvm/bin:/home/johanalernova/.rvm/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.16.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@hotwired%2fstimulus-loading: Not found
+      at Request.params.callback [as _callback] (/usr/share/yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/usr/share/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:527:28)
+      at Request.<anonymous> (/usr/share/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:527:28)
+      at IncomingMessage.<anonymous> (/usr/share/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:641:28)
+      at IncomingMessage.emit (node:events:539:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "dependencies": {
+      "@hotwired/stimulus": "^3.2.1",
+      "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+      "@hotwired/turbo": "^7.2.4",
+      "@rails/webpacker": "^5.4.3",
+      "bootstrap": "^5.2.3",
+      "dropzone": "^6.0.0-beta.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

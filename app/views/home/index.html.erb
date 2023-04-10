@@ -1,0 +1,10 @@
+<% if user_signed_in? %>
+  <%= turbo_frame_tag "turbo-principal" do%>
+    <%= render partial: 'top_navbar' %>
+    <%= turbo_frame_tag "turbo-div" do %>
+        <%= render partial: params[:partial] %>
+    <% end %>
+  <% end %>
+<% else %>
+    <%= render partial: 'landing_page'%>
+<% end %>
