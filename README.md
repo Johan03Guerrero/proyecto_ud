@@ -144,9 +144,90 @@ Una vez realizado el registro del usuario, inicializar el servidor local.
 <p align="right">(<a href="#readme-top">Volver al Inicio</a>)</p>
 
 
+## Documentación
+
+Para la realización del proyecto se siguio la guia de configuración de ruby on rails: https://guides.rubyonrails.org/getting_started.html. 
+Se genero la siguiente estructura de base de datos para dar solución a la problematica:
+![image](https://user-images.githubusercontent.com/40550092/232260408-fec72aa0-d99c-48b0-a56b-44a0c4bc6e13.png)
+
+1. Gemas utilizadas en el proyecto: 
+```rb
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.7.4'
+
+gem 'bootsnap', require: false
+gem 'devise'
+gem 'gon'
+gem 'importmap-rails'
+gem 'jbuilder'
+gem 'pg'
+gem 'puma', '~> 5.6'
+gem 'rails', '~> 7.0.4'
+gem 'rails-i18n'
+gem 'redis', '~> 4.0'
+gem 'roo-xls'
+gem 'rubocop'
+gem 'sprockets-rails'
+gem 'stimulus-rails'
+gem 'turbo-rails'
+
+group :development, :test do
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'letter_opener'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'rubocop-airbnb'
+end
+
+group :development do
+  gem 'listen', '~> 3.3'
+  gem 'spring'
+  gem 'web-console'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+end
+```
+
+* Para la implementación del manejo de usuarios (Usuarios), se hizo uso de la gema devise: https://github.com/heartcombo/devise
+* Para la carga y lectura de archivos xlsx, se hizo uso de la gema roo-xls: https://github.com/roo-rb/roo-xls
+* Para el análisis y formateo de código, se hizo uso de la gema rubocop: https://github.com/rubocop/rubocop 
+* Para el manejo de archivos JavaScript en RoR, se hizo uso de la gema stimulus-rails: https://github.com/hotwired/stimulus-rails
+
+2. Librerias utilizadas en el proyecto: 
+```js
+{
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@hotwired/turbo": "^7.2.4",
+    "@rails/webpacker": "^5.4.3",
+    "apexcharts": "^3.37.3",
+    "bootstrap": "^5.3.0-alpha1",
+    "datatables.net-buttons-dt": "^2.3.6",
+    "datatables.net-dt": "^1.13.4",
+    "dropzone": "^6.0.0-beta.2",
+    "select2": "^4.1.0-rc.0"
+  }
+}
+```
+* Para la plantilla de estilos, se hizo uso de bootstrap: https://getbootstrap.com/
+* Para el manejo de los selects, se hizo uso de select2: https://select2.org/
+* Para el manejo de las graficas, se hizo uso de apexcharts: https://apexcharts.com/
+
+
+<p align="right">(<a href="#readme-top">Volver al Inicio</a>)</p>
+
+
 ## Licencia
-
-
 
 <p align="right">(<a href="#readme-top">Volver al Inicio</a>)</p>
 
