@@ -27,7 +27,7 @@ export default class extends Controller {
           top: 18,
           left: 7,
           blur: 10,
-          opacity: 0.2
+          opacity: 0.3
         },
       },
       stroke: {
@@ -47,6 +47,49 @@ export default class extends Controller {
           }
         }
       },
+      yaxis: [
+        {
+          axisTicks: {
+            show: true
+          },
+          axisBorder: {
+            show: true,
+            color: "#26A0FC"
+          },
+          labels: {
+            style: {
+              colors: "#26A0FC"
+            }
+          },
+          title: {
+            text: "Recaudo Mes",
+            style: {
+              color: "#26A0FC"
+            }
+          }
+        },
+        {
+          opposite: true,
+          axisTicks: {
+            show: true
+          },
+          axisBorder: {
+            show: true,
+            color: "#26E7A6"
+          },
+          labels: {
+            style: {
+              colors: "#26E7A6"
+            }
+          },
+          title: {
+            text: "Ejecución %",
+            style: {
+              color: "#26E7A6"
+            }
+          }
+        }
+      ],
       title: {
         text: this.titleValue,
         align: 'left',
