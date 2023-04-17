@@ -1,6 +1,6 @@
-<% periodos = Periodo.all.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
+<% periodos = Periodo.all&.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
 <% conceptos = Concepto.all.order(:nombre).pluck(:nombre, :id) %>
-<% conceptos_options = conceptos.map { |nombre, id| [nombre, id.to_s] } %>
+<% conceptos_options = conceptos&.map { |nombre, id| [nombre, id.to_s] } %>
 <% params[:fecha_inicio] ||= periodos.last %>
 <% params[:fecha_fin] ||= periodos.last %>
 
