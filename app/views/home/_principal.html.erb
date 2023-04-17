@@ -1,4 +1,4 @@
-<% periodos = Periodo.all.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
+<% periodos = Periodo.all.pluck(:fecha)&.map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
 <% params[:fecha_inicio] ||= periodos.last %>
 <% params[:fecha_fin] ||= periodos.last %>
 <% presupuestos_conceptos = PresupuestoConcepto.filter_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin])) %>
