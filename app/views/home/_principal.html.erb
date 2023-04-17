@@ -1,7 +1,7 @@
 <% periodos = Periodo.all.pluck(:fecha)&.map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
 <% params[:fecha_inicio] ||= periodos.last %>
 <% params[:fecha_fin] ||= periodos.last %>
-<% presupuestos_conceptos = PresupuestoConcepto.filter_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin])) %>
+<% presupuestos_conceptos = PresupuestoConcepto.filter_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin])) if periodos.present? %>
 <div class="div-principal">
   <%= render "layouts/flash_messages" %>
   <%= form_with(url: root_path, method: :get) do |f| %>
@@ -32,7 +32,7 @@
       </tr>
     </thead>
     <tbody>
-      <% presupuestos_conceptos.each do |presupuesto_concepto| %>
+      <% presupuestos_conceptos&.each do |presupuesto_concepto| %>
       <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
       <tr>
         <td><%= presupuesto_concepto.concepto_codigo %></td>
