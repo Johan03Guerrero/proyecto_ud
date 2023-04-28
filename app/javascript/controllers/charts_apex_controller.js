@@ -8,6 +8,8 @@ export default class extends Controller {
     labels: Array,
     series: Array,
     title: String,
+    eje1: String,
+    eje2: String,
   }
 
   initialize() {
@@ -62,7 +64,7 @@ export default class extends Controller {
             }
           },
           title: {
-            text: "Recaudo Mes",
+            text: this.eje1Value,
             style: {
               color: "#26A0FC"
             }
@@ -83,7 +85,7 @@ export default class extends Controller {
             }
           },
           title: {
-            text: "Ejecución %",
+            text: this.eje2Value,
             style: {
               color: "#26E7A6"
             }
@@ -99,11 +101,7 @@ export default class extends Controller {
         }
       },
       legend: {
-        position: 'bottom',
-        horizontalAlign: 'center',
-        floating: true,
-        offsetY: -25,
-        offsetX: -5
+        position: 'top',
       }
     };
   }
