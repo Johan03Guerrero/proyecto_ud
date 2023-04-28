@@ -1,0 +1,75 @@
+<% periodos = Periodo.all&.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
+<% conceptos = Concepto.all.order(:nombre).pluck(:nombre, :codigo, :id) %>
+<% conceptos_options = conceptos&.map { |nombre, codigo, id| ["#{codigo} #{nombre.upcase}", id.to_s] } %>
+<% params[:fecha_inicio] ||= periodos.last %>
+<% params[:fecha_fin] ||= periodos.last %>
+<% list_cols = [["Presupuesto Inicial", "presupuesto_inicial"], ["Adición Modificación Mes", "adicion_modificacion_mes"], 
+                ["Adición Modificación Acumulado", "adicion_modificacion_acumulado"], ["Presupuesto Definitivo", "presupuesto_definitivo"],
+                ["Recaudo Mes", "recaudo_mes"], ["Recaudo Acumulado", "recaudo_acumulado"],
+                ["Ejecución", "ejecucion"], ["Saldo Por Recaudar", "saldo_por_recaudar"]
+               ] 
+%>
+<% params[:col_1] ||=  list_cols.first %>
+<% params[:col_2] ||=  list_cols.last %>
+<% list_cols_hash = Hash[list_cols.map {|title, key| [key, title]}] %>
+
+<div class="div-principal">
+  <div class="d-flex justify-content-center">
+    <%= form_with(url: root_path, method: :get) do |f| %>
+      <input type="hidden" name="partial" value="dashboard"/>
+      <input type="hidden" name="active" value="personalizada"/>
+      <div class="d-flex align-items-center my-5 flex-wrap">
+        <label for="select1" class="px-4">Periodo Inicio:</label>
+        <%= f.select :fecha_inicio, options_for_select(periodos, params[:fecha_inicio]), {}, { class: 'select-class1' } %>
+        <label for="select2" class="px-4">Periodo Fin:</label>
+        <%= f.select :fecha_fin, options_for_select(periodos, params[:fecha_fin]), {}, { class: 'select-class1' } %>
+      </div>
+      <div class="d-flex align-items-center my-5 flex-wrap">
+        <label for="select2" class="px-4">Primer Valor a Comparar:</label>
+        <%= f.select :col_1, options_for_select(list_cols, params[:col_1]), { include_blank: true }, { class: 'select-class1'} %>
+        <label for="select2" class="px-4">Segundo Valor a Comparar:</label>
+        <%= f.select :col_2, options_for_select(list_cols, params[:col_2]), { include_blank: true }, { class: 'select-class1'} %>
+      </div>
+      <div class="d-flex align-items-center my-5 flex-wrap">
+        <label for="select2" class="px-4">Conceptos:</label>
+        <%= f.select :conceptos, options_for_select(conceptos_options, params[:conceptos]), { include_blank: true }, { class: 'select-class1', multiple: true } %>
+        <div class="px-1">
+          <%= f.submit "Filtrar", class: "button rounded-pill" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <% if params[:conceptos].present? %>
+      <% params[:conceptos].compact.reject(&:blank?).each do |concepto_id| %>
+        <% concepto_find = Concepto.find(concepto_id)%>
+        <% concepto_title = "#{concepto_find.codigo} #{concepto_find.nombre}"  %>
+        <% concepto_data = PresupuestoConcepto.filter_concepto_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin]), concepto_id) %>
+        <% labels = concepto_data.map { |concepto| Date.parse(concepto.periodo_fecha.to_s).strftime("%m/%d/%Y") }.to_json %>
+        <% labels = labels != "[]" ? labels : [Date.parse(params[:fecha_fin])].to_json %>
+        <% series = [
+          { name: list_cols_hash[params[:col_1]], data: concepto_data.pluck(params[:col_1].to_sym) },
+          { name: list_cols_hash[params[:col_2]], data: concepto_data.pluck(params[:col_2].to_sym) },
+        ].to_json %>
+        <div 
+          data-controller="charts-apex"
+          data-charts-apex-labels-value="<%= labels %>"
+          data-charts-apex-series-value="<%= series %>"
+          data-charts-apex-eje1-value="<%= list_cols_hash[params[:col_1]] %>"
+          data-charts-apex-eje2-value="<%= list_cols_hash[params[:col_2]] %>"
+          data-charts-apex-title-value="<%= concepto_title rescue ''%>"
+        >
+          <div data-target="charts-apex.chart"></div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<script>
+$(document).ready(function() {
+  $('.select-class1').select2({
+    placeholder: 'Buscar opciones...',
+    noResultsText: 'No se encontraron resultados'
+  });
+});
+</script>
