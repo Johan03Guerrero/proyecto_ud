@@ -1,0 +1,140 @@
+<% year_initial = 2010 %>
+<% year_now = Date.today.year %>
+<% array_years = (year_initial..year_now).to_a.reverse %>
+<div class="div-principal">
+  <div class="d-flex justify-content-center">
+    <%= form_with(url: root_path, method: :get) do |f| %>
+      <input type="hidden" name="partial" value="dashboard"/>
+      <input type="hidden" name="active" value="principal"/>
+      <div class="d-flex align-items-center my-5 flex-wrap">
+        <label for="select2" class="px-4">Años a Revisar:</label>
+        <%= f.select :years, options_for_select(array_years, params[:years]), { include_blank: true }, { class: 'select-class1', multiple: true, style: "width: 210px"} %>
+        <div class="px-4">
+          <%= f.submit "Filtrar", class: "button rounded-pill" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <% if params[:years].present? %>
+      <div>
+        <H2> Presupuesto de Funcionamiento </H2>
+      </div>
+      <% years = params[:years].compact.reject(&:blank?) %>
+      <% year_initial = years.first %>
+      <% year_last = years.first %>
+      <% data_years = [] %>
+      <% years_with_data = [] %>
+      <% years.each do |year| %>
+        <% json_pie = ChartsPrincipal.new(year.to_s).call %>
+        <% labels = json_pie.keys.to_json %>
+        <% series = json_pie.values.to_json %>
+        <div class="d-flex flex-column align-items-center">
+          <h4>
+            Año: <%= year %>
+          </h4>
+          <% if json_pie.present? %>
+            <% data_years << json_pie %>
+            <% years_with_data << year %>
+            <div 
+              data-controller="charts-apex-donut"
+              data-charts-apex-donut-labels-value="<%= labels %>"
+              data-charts-apex-donut-series-value="<%= series %>"
+              class="d-flex justify-content-center"
+            >
+              <div data-target="charts-apex-donut.chart"></div>
+            </div>
+          <% else %>
+            <span class="my-4">
+              No hay datos para este año
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+      <div>
+        <H2> Comparativo Presupuesto Inicial de Funcionamiento </H2>
+        <% if years.count > 1 && data_years.present? && data_years.count > 1 %>
+          <% compact_data = DataVariacion.new(data_years, years_with_data).call %>
+          <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <% years_with_data.each do |year|%>
+                  <th><%= "PRESUPUESTO INICIAL #{year}" %></th>
+                <% end %>
+                <th>Var %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% compact_data.each do |data| %>
+                <tr>
+                  <% data.each do |column| %>
+                    <td> <%= column %> </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% data_chart_variacion = DataVariacionChart.new(compact_data, years_with_data).call %>
+        <% labels = data_chart_variacion[:labels].to_json %>
+        <% series = data_chart_variacion[:series].to_json %>
+        <% serie_variacion = data_chart_variacion[:serie_variacion].to_json %>
+        <div 
+          data-controller="chart-data-variacion"
+          data-chart-data-variacion-labels-value="<%= labels %>"
+          data-chart-data-variacion-series-value="<%= series %>"
+          data-chart-data-variacion-title-value="Compartivo Gráfica"
+        >
+          <div data-target="chart-data-variacion.chart"></div>
+        </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+$(document).ready(function() {
+  $('.select-class1').select2({
+    placeholder: 'Buscar opciones...',
+    noResultsText: 'No se encontraron resultados'
+  });
+});
+
+$(document).ready(function() {
+  $('.datatable-dashboard').DataTable({
+    paging: true,
+    ordering: true,
+    searching: true,
+    lengthChange: true,
+    pageLength: 10,
+    responsive: true,
+    language: {
+      lengthMenu: "Mostrar _MENU_ filas por página",
+      zeroRecords: "No se encontraron resultados",
+      info: "Mostrando página _PAGE_ de _PAGES_",
+      infoEmpty: "No hay registros disponibles",
+      infoFiltered: "(filtrado de _MAX_ registros totales)",
+      search: "Buscar:",
+      paginate: {
+        previous: "Anterior",
+        next: "Siguiente"
+      },
+    },
+    dom: 'Blfrtip',
+    buttons: [
+       {
+            extend: 'collection',
+            text: 'Exportar',
+            buttons: [
+                { extend: 'copy', className: 'btn-info' },
+                { extend: 'csv', className: 'btn-info' },
+                { extend: 'excel', className: 'btn-info', title: 'XLS-File' },
+                { extend: 'pdf', className: 'btn-info', title: $('title').text() },
+            ],
+            className: 'btn rounded-pill dropdown-toggle'
+        }
+    ]
+  });
+});
+</script>
+

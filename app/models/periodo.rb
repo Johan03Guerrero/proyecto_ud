@@ -11,4 +11,12 @@ class Periodo < ApplicationRecord
                             end
                           end .compact
                         }
+
+  scope :filter_year, lambda { |year|
+                          map do |periodo|
+                            if Date.parse(periodo.fecha) >= Date.parse("01-01-#{year}") && Date.parse(periodo.fecha) <= Date.parse("01-12-#{year}")
+                              periodo
+                            end
+                          end .compact.sort_by { |periodo| Date.parse(periodo.fecha) }
+                        }
 end
