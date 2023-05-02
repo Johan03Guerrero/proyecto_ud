@@ -1,6 +1,6 @@
 <% periodos = Periodo.all&.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
 <% conceptos = Concepto.all.order(:nombre).pluck(:nombre, :codigo, :id) %>
-<% conceptos_options = conceptos&.map { |nombre, codigo, id| ["#{codigo} #{nombre.upcase}", id.to_s] } %>
+<% conceptos_options = conceptos&.map { |nombre, codigo, id| ["#{codigo} #{nombre.upcase rescue 'sin-titulo'}", id.to_s] } %>
 <% params[:fecha_inicio] ||= periodos.last %>
 <% params[:fecha_fin] ||= periodos.last %>
 <% list_cols = [["Presupuesto Inicial", "presupuesto_inicial"], ["Adición Modificación Mes", "adicion_modificacion_mes"], 
