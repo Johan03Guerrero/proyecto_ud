@@ -5,11 +5,14 @@ class Concepto < ApplicationRecord
 
 
   HASH_GASTOS_FUNCIONAMIENTO = {
-    "Pago Pensiones": ["3-1-4-02", "3-01-004-02", "3-34"],
-    "Nómina Administrativos": ["3-01-001-01-01-01-0001-01", "3-1-1-1", "3-1-1-01"],
-    "Nómina Docentes": ["3-01-001-01-01-01-0001-02", "3-1-2-1-01"],
-    "Nómina Trabajadores Oficiales": ["3-01-001-03-01-01-0001", "3-1-1-03-01-01-0001", "3-1-2-1-02-1", "3-1-2-1-02-10"],
-    "Profesores Hora Cátedra y Vinculación Especial": ["3-01-001-02-01-01-0001", "3-1-2-1-02-99-0", "3-1-2-1-02-99-01"],
-    "Gastos Generales": ["3-01-002-02-02", "3-1-1-2"],
+    "Aportes patronales al sector privado y publico": ["3-1-1-03"],
+    "Servicios personales asociados a la nomina": ["3-1-1-01"],
+    "Servicios personales indirectos": ["3-1-1-02"],
+    "Adquisicion de bienes": ["3-1-2-01"],
+    "Adquisicion de servicios": ["3-1-2-02"],
+    "Otros gastos generales": ["3-1-2-03"],
+    "Transferencias para funcionamiento": ["3-1-3"],
+    "Inversion directa": ["3-3-1"],
+    "Transferencias para inversion": ["3-3-2"],
   }
 end
