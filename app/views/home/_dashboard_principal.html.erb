@@ -54,19 +54,19 @@
       <div>
         <H2> Comparativo Presupuesto Inicial de Funcionamiento </H2>
         <% if years.count > 1 && data_years.present? && data_years.count > 1 %>
-          <% compact_data = DataVariacion.new(data_years, years_with_data).call %>
+          <% @compact_data = DataVariacion.new(data_years, years_with_data).call %>
           <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
             <thead>
               <tr>
                 <th>Concepto</th>
+                <th>Var %</th>
                 <% years_with_data.each do |year|%>
                   <th><%= "PRESUPUESTO INICIAL #{year}" %></th>
                 <% end %>
-                <th>Var %</th>
               </tr>
             </thead>
             <tbody>
-              <% compact_data.each do |data| %>
+              <% @compact_data.each do |data| %>
                 <tr>
                   <% data.each do |column| %>
                     <td> <%= column %> </td>
@@ -75,7 +75,7 @@
               <% end %>
             </tbody>
           </table>
-        <% data_chart_variacion = DataVariacionChart.new(compact_data, years_with_data).call %>
+        <% data_chart_variacion = DataVariacionChart.new(@compact_data, years_with_data).call %>
         <% labels = data_chart_variacion[:labels].to_json %>
         <% series = data_chart_variacion[:series].to_json %>
         <% serie_variacion = data_chart_variacion[:serie_variacion].to_json %>
@@ -103,7 +103,7 @@ $(document).ready(function() {
 $(document).ready(function() {
   $('.datatable-dashboard').DataTable({
     paging: true,
-    ordering: true,
+    ordering: false,
     searching: true,
     lengthChange: true,
     pageLength: 10,
