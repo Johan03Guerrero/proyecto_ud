@@ -7,7 +7,7 @@ class EstimatedProjectionService
   
     def call
       promedios_transformados = []
-      @data.each do |concepto|
+      @data&.each do |concepto|
         valores = concepto[1..-1].drop(1).select { |valor| valor.is_a?(Float) }
         promedio = valores.sum / valores.length
         promedio_transformado = promedio * (1 + @inflacion/100) * (1 + @ipc/100)
