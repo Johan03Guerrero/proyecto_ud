@@ -6,6 +6,5 @@ class HomeController < ApplicationController
 
   def index
     params[:partial] ||= 'principal'
-    @locale = :es
   end
 end

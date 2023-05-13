@@ -3,6 +3,9 @@
 class Concepto < ApplicationRecord
   has_many :presupuesto_concepto
 
+  scope :filter_dashboard, lambda { |tipo_concepto|
+    where("codigo LIKE ?", "#{tipo_concepto}%")
+  }
 
   HASH_GASTOS_FUNCIONAMIENTO = {
     "Aportes patronales al sector privado y publico": ["3-1-1-03"],
@@ -14,5 +17,15 @@ class Concepto < ApplicationRecord
     "Transferencias para funcionamiento": ["3-1-3"],
     "Inversion directa": ["3-3-1"],
     "Transferencias para inversion": ["3-3-2"],
+  }
+
+  HASH_INGRESOS_FUNCIONAMIENTO = {
+    "Ingresos tributarios": ["2-1-1"],
+    "Ingresos no tributarios": ["2-1-2"],
+    "Transferencias nacion": ["2-2-1"],
+    "Recursos de capital": ["2-4"],
+    "Rendimientos por operaciones financieras": ["2-4-3"],
+    "Transferencias administracion central": ["2-2-4"],
+    "Venta de bienes y servicios": ["2-1-2-04-01"],
   }
 end

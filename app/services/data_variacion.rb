@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class DataVariacion
-  def initialize(data_years, years)
+  def initialize(data_years, years, type)
     @data_years = data_years
     @years = years
+    @type = type
   end
 
   def call
@@ -15,6 +16,7 @@ class DataVariacion
 
   def transform_data
     data_final = {}
+    initial_data = get_initial_data
     gastos_total, *categories = initial_data
     year_1 = @data_years.first
     year_2 = @data_years.last
@@ -27,8 +29,14 @@ class DataVariacion
       gastos_total << data_final[year].values.sum
     end
 
-    year_1['GASTOS FUNCIONAMIENTO'.to_sym] = gastos_total[1]
-    year_2['GASTOS FUNCIONAMIENTO'.to_sym] = gastos_total.last
+    if @type == "ingresos"
+      gastos_total[0] = "INGRESOS FUNCIONAMIENTO"
+    else
+      gastos_total[0] = "GASTOS FUNCIONAMIENTO"
+    end
+
+    year_1[gastos_total[0].to_sym] = gastos_total[1]
+    year_2[gastos_total[0].to_sym] = gastos_total.last
 
     [year_1, year_2, gastos_total, *categories, data_final]
   end
@@ -46,7 +54,7 @@ class DataVariacion
         category << data_year[category.first.to_sym]
       end
     end
-    gastos_total << data_formula["GASTOS FUNCIONAMIENTO".to_sym]
+    gastos_total << data_formula[gastos_total[0].to_sym]
     gastos_total[1], gastos_total[-1] = gastos_total[-1], gastos_total[1]
     [gastos_total, *categories]
   end
@@ -55,18 +63,31 @@ class DataVariacion
     ((year_final - year_old) * 100 / year_final).round(2)
   end
 
-  def initial_data
-    [
-      ['GASTOS FUNCIONAMIENTO'],
-      ['Aportes patronales al sector privado y publico'],
-      ['Servicios personales asociados a la nomina'],
-      ['Servicios personales indirectos'],
-      ['Adquisicion de bienes'],
-      ['Adquisicion de servicios'],
-      ['Otros gastos generales'],
-      ['Transferencias para funcionamiento'],
-      ['Inversion directa'],
-      ['Transferencias para inversion'],
-    ]
+  def get_initial_data
+    if @type == "ingresos"
+      [
+        ['INGRESOS FUNCIONAMIENTO'],
+        ['Ingresos tributarios'],
+        ['Ingresos no tributarios'],
+        ['Transferencias nacion'],
+        ['Recursos de capital'],
+        ['Rendimientos por operaciones financieras'],
+        ['Transferencias administracion central'],
+        ['Venta de bienes y servicios'],
+      ]
+    else
+      [
+        ['GASTOS FUNCIONAMIENTO'],
+        ['Aportes patronales al sector privado y publico'],
+        ['Servicios personales asociados a la nomina'],
+        ['Servicios personales indirectos'],
+        ['Adquisicion de bienes'],
+        ['Adquisicion de servicios'],
+        ['Otros gastos generales'],
+        ['Transferencias para funcionamiento'],
+        ['Inversion directa'],
+        ['Transferencias para inversion'],
+      ]
+    end
   end
 end

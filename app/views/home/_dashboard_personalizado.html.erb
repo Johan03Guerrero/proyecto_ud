@@ -1,4 +1,4 @@
-<% periodos = Periodo.all&.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
+<% periodos = Periodo.all&.pluck(:fecha).map { |fecha| Date.parse(fecha).strftime("%Y") }.sort.uniq %>
 <% conceptos = Concepto.all.order(:nombre).pluck(:nombre, :codigo, :id) %>
 <% conceptos_options = conceptos&.map { |nombre, codigo, id| ["#{codigo} #{nombre.upcase rescue 'sin-titulo'}", id.to_s] } %>
 <% params[:fecha_inicio] ||= periodos.last %>
@@ -19,16 +19,24 @@
       <input type="hidden" name="partial" value="dashboard"/>
       <input type="hidden" name="active" value="personalizada"/>
       <div class="d-flex align-items-center my-5 flex-wrap">
-        <label for="select1" class="px-4">Periodo Inicio:</label>
-        <%= f.select :fecha_inicio, options_for_select(periodos, params[:fecha_inicio]), {}, { class: 'select-class1' } %>
-        <label for="select2" class="px-4">Periodo Fin:</label>
-        <%= f.select :fecha_fin, options_for_select(periodos, params[:fecha_fin]), {}, { class: 'select-class1' } %>
+        <div class="d-flex me-5">
+          <label for="select1" class="px-4">Periodo Inicio:</label>
+          <%= f.select :fecha_inicio, options_for_select(periodos, params[:fecha_inicio]), {}, { class: 'select-class1' } %>
+        </div>
+        <div class="d-flex me-5">
+          <label for="select2" class="px-4">Periodo Fin:</label>
+          <%= f.select :fecha_fin, options_for_select(periodos, params[:fecha_fin]), {}, { class: 'select-class1' } %>
+        </div>
       </div>
       <div class="d-flex align-items-center my-5 flex-wrap">
-        <label for="select2" class="px-4">Primer Valor a Comparar:</label>
-        <%= f.select :col_1, options_for_select(list_cols, params[:col_1]), { include_blank: true }, { class: 'select-class1'} %>
-        <label for="select2" class="px-4">Segundo Valor a Comparar:</label>
-        <%= f.select :col_2, options_for_select(list_cols, params[:col_2]), { include_blank: true }, { class: 'select-class1'} %>
+        <div class="d-flex me-5">
+          <label for="select2" class="px-4">Primer Valor a Comparar:</label>
+          <%= f.select :col_1, options_for_select(list_cols, params[:col_1]), { include_blank: true }, { class: 'select-class1'} %>
+        </div>
+        <div class="d-flex me-5">
+          <label for="select2" class="px-4">Segundo Valor a Comparar:</label>
+          <%= f.select :col_2, options_for_select(list_cols, params[:col_2]), { include_blank: true }, { class: 'select-class1'} %>
+        </div>
       </div>
       <div class="d-flex align-items-center my-5 flex-wrap">
         <label for="select2" class="px-4">Conceptos:</label>
@@ -44,7 +52,7 @@
       <% params[:conceptos].compact.reject(&:blank?).each do |concepto_id| %>
         <% concepto_find = Concepto.find(concepto_id)%>
         <% concepto_title = "#{concepto_find.codigo} #{concepto_find.nombre}"  %>
-        <% concepto_data = PresupuestoConcepto.filter_concepto_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin]), concepto_id) %>
+        <% concepto_data = PresupuestoConcepto.filter_concepto_dashboard(Date.parse("01-12-#{params[:fecha_inicio]}"), Date.parse("01-12-#{params[:fecha_fin]}"), concepto_id) %>
         <% labels = concepto_data.map { |concepto| Date.parse(concepto.periodo_fecha.to_s).strftime("%m/%d/%Y") }.to_json %>
         <% labels = labels != "[]" ? labels : [Date.parse(params[:fecha_fin])].to_json %>
         <% series = [

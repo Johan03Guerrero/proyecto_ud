@@ -1,21 +1,26 @@
-<% periodos = Periodo.all.pluck(:fecha)&.map { |fecha| Date.parse(fecha).strftime("%Y/%m/%d") }.sort %>
+<% periodos = Periodo.all.pluck(:fecha)&.map { |fecha| Date.parse(fecha).strftime("%Y") }.sort.uniq %>
 <% params[:fecha_inicio] ||= periodos.last %>
 <% params[:fecha_fin] ||= periodos.last %>
-<% presupuestos_conceptos = PresupuestoConcepto.filter_dashboard(Date.parse(params[:fecha_inicio]), Date.parse(params[:fecha_fin])) if periodos.present? %>
+<% gastos = PresupuestoConcepto.filter_dashboard(Date.parse("01-12-#{params[:fecha_inicio]}"), Date.parse("01-12-#{params[:fecha_fin]}"), "3") if periodos.present? %>
+<% ingresos = PresupuestoConcepto.filter_dashboard(Date.parse("01-12-#{params[:fecha_inicio]}"), Date.parse("01-12-#{params[:fecha_fin]}"), "2") if periodos.present? %>
 <div class="div-principal">
   <%= render "layouts/flash_messages" %>
-  <%= form_with(url: root_path, method: :get) do |f| %>
-    <div class="d-flex align-items-center my-5">
-      <label for="select1" class="pe-4">Periodo Inicio:</label>
-      <%= f.select :fecha_inicio, options_for_select(periodos, params[:fecha_inicio]), {}, { class: 'select-class1' } %>
+  <%= form_with(url: root_path, method: :get, class:"d-flex align-items-center") do |f| %>
+      <div class="d-flex me-5">
+        <label for="select1" class="pe-4">Periodo Inicio:</label>
+        <%= f.select :fecha_inicio, options_for_select(periodos, params[:fecha_inicio]), {}, { class: 'select-class1' } %>
+      </div>
+      <div class="d-flex me-5">
       <label for="select2" class="px-4">Periodo Fin:</label>
       <%= f.select :fecha_fin, options_for_select(periodos, params[:fecha_fin]), {}, { class: 'select-class1' } %>
+      </div>
+
       <div class="px-4">
         <%= f.submit "Filtrar", class: "button rounded-pill" %>
       </div>
-    </div>
   <% end %>
-  <table id="datatablePrincipal" class="table table-striped table-bordered nowrap" style="width:100%">
+  <H2> Gastos </H2>
+  <table class="table table-striped table-bordered nowrap datatable-principal" style="width:100%">
     <thead>
       <tr>
         <th>Codigo</th>
@@ -32,12 +37,48 @@
       </tr>
     </thead>
     <tbody>
-      <% presupuestos_conceptos&.each do |presupuesto_concepto| %>
+      <% gastos&.each do |presupuesto_concepto| %>
       <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
       <tr>
         <td><%= presupuesto_concepto.concepto_codigo %></td>
         <td><%= presupuesto_concepto.concepto_nombre %></td>
-        <td><%= I18n.localize(fecha_formato, format: '%B %Y', locale: @locale) %></td>
+        <td><%= I18n.localize(fecha_formato, format: '%Y') %></td>
+        <td><%= presupuesto_concepto.presupuesto_inicial %></td>
+        <td><%= presupuesto_concepto.adicion_modificacion_mes %></td>
+        <td><%= presupuesto_concepto.adicion_modificacion_acumulado %></td>
+        <td><%= presupuesto_concepto.presupuesto_definitivo %></td>
+        <td><%= presupuesto_concepto.recaudo_mes %></td>
+        <td><%= presupuesto_concepto.recaudo_acumulado %></td>
+        <td><%= presupuesto_concepto.ejecucion %> %</td>
+        <td><%= presupuesto_concepto.saldo_por_recaudar %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <H2> Ingresos </H2>
+  <table class="table table-striped table-bordered nowrap datatable-principal" style="width:100%">
+    <thead>
+      <tr>
+        <th>Codigo</th>
+        <th>Concepto</th>
+        <th>Fecha</th>
+        <th>Presupuesto Inicial</th>
+        <th>Adición Modificacion Mes</th>
+        <th>Adición Modificacion Acumulado</th>
+        <th>Presupuesto Definitivo</th>
+        <th>Recaudo Mes</th>
+        <th>Recaudo Acumulado</th>
+        <th>Porcentaje Ejecucion</th>
+        <th>Saldo Por Recaudar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ingresos&.each do |presupuesto_concepto| %>
+      <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
+      <tr>
+        <td><%= presupuesto_concepto.concepto_codigo %></td>
+        <td><%= presupuesto_concepto.concepto_nombre %></td>
+        <td><%= I18n.localize(fecha_formato, format: '%Y') %></td>
         <td><%= presupuesto_concepto.presupuesto_inicial %></td>
         <td><%= presupuesto_concepto.adicion_modificacion_mes %></td>
         <td><%= presupuesto_concepto.adicion_modificacion_acumulado %></td>
@@ -53,7 +94,7 @@
 </div>
 <script>
 $(document).ready(function() {
-  $('#datatablePrincipal').DataTable({
+  $('.datatable-principal').DataTable({
     paging: true,
     ordering: true,
     searching: true,

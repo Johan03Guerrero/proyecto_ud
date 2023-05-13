@@ -86,15 +86,18 @@ class XlsxImporterService
   end
 
   def build_presupuesto_concepto(row, periodo_id, concepto_id)
+    presupuesto_definitivo = row['presupuesto_inicial'].to_f + row['adicion_modificacion_acumulado'].to_f rescue 0
+    ejecucion = row['recaudo_acumulado'].to_f / presupuesto_definitivo rescue 0
+    saldo_por_recaudar = presupuesto_definitivo - row['recaudo_acumulado'].to_f rescue 0
     {
       presupuesto_inicial: row['presupuesto_inicial'].to_f,
       adicion_modificacion_mes: row['adicion_modificacion_mes'].to_f,
       adicion_modificacion_acumulado: row['adicion_modificacion_acumulado'].to_f,
-      presupuesto_definitivo: row['presupuesto_definitivo'].to_f,
+      presupuesto_definitivo: presupuesto_definitivo,
       recaudo_mes: row['recaudo_mes'].to_f,
       recaudo_acumulado: row['recaudo_acumulado'].to_f,
-      ejecucion: row['porcentaje_ejecucion'].to_f,
-      saldo_por_recaudar: row['saldo_por_recaudar'].to_f,
+      ejecucion: ejecucion,
+      saldo_por_recaudar: saldo_por_recaudar,
       concepto_id: concepto_id,
       periodo_id: periodo_id
     }
