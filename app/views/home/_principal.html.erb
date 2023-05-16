@@ -49,7 +49,7 @@
         <td><%= presupuesto_concepto.presupuesto_definitivo %></td>
         <td><%= presupuesto_concepto.recaudo_mes %></td>
         <td><%= presupuesto_concepto.recaudo_acumulado %></td>
-        <td><%= presupuesto_concepto.ejecucion %> %</td>
+        <td><%= presupuesto_concepto.ejecucion * 100 rescue 0 %> %</td>
         <td><%= presupuesto_concepto.saldo_por_recaudar %></td>
       </tr>
       <% end %>
@@ -85,7 +85,7 @@
         <td><%= presupuesto_concepto.presupuesto_definitivo %></td>
         <td><%= presupuesto_concepto.recaudo_mes %></td>
         <td><%= presupuesto_concepto.recaudo_acumulado %></td>
-        <td><%= presupuesto_concepto.ejecucion %> %</td>
+        <td><%= presupuesto_concepto.ejecucion * 100 rescue 0 %> %</td>
         <td><%= presupuesto_concepto.saldo_por_recaudar %></td>
       </tr>
       <% end %>
