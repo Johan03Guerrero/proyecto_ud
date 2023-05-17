@@ -8,6 +8,11 @@ class Concepto < ApplicationRecord
   }
 
   HASH_GASTOS_FUNCIONAMIENTO = {
+    "Gastos de funcionamiento": ["3-1"],
+    "Servicios personales": ["3-1-1"],
+    "Gastos generales": ["3-1-2"],
+    "Promocion de la investigacion y desarrollo cientifico": ["3-1-6"],
+    "Mejoramiento y ampliacion de la infraestructura fisica de la universidad": ["3-3-7"],
     "Aportes patronales al sector privado y publico": ["3-1-1-03"],
     "Servicios personales asociados a la nomina": ["3-1-1-01"],
     "Servicios personales indirectos": ["3-1-1-02"],

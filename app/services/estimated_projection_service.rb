@@ -1,8 +1,9 @@
 class EstimatedProjectionService
-  def initialize(data, inflacion, ipc)
+  def initialize(data, inflacion, ipc, adc_coyuntural)
     @data = data
     @inflacion = inflacion
     @ipc = ipc
+    @adc_coyuntural = adc_coyuntural
   end
 
   def call
@@ -10,7 +11,7 @@ class EstimatedProjectionService
     @data&.each do |concepto|
       valores = concepto[1..-1].drop(1).select { |valor| valor.is_a?(Float) }
       promedio = valores.sum / valores.length rescue 0
-      promedio_transformado = promedio * (1 + @inflacion/100) * (1 + @ipc/100)
+      promedio_transformado = (promedio * (1 + @inflacion/100) * (1 + @ipc/100)) + @adc_coyuntural
       promedios_transformados << [concepto[0], promedio_transformado]
     end
 

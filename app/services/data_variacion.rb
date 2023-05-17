@@ -78,6 +78,11 @@ class DataVariacion
     else
       [
         ['GASTOS FUNCIONAMIENTO'],
+        ['Gastos de funcionamiento'],
+        ['Servicios personales'],
+        ['Gastos generales'],
+        ['Promocion de la investigacion y desarrollo cientifico'],
+        ['Mejoramiento y ampliacion de la infraestructura fisica de la universidad'],
         ['Aportes patronales al sector privado y publico'],
         ['Servicios personales asociados a la nomina'],
         ['Servicios personales indirectos'],

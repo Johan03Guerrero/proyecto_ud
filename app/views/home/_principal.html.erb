@@ -19,42 +19,6 @@
         <%= f.submit "Filtrar", class: "button rounded-pill" %>
       </div>
   <% end %>
-  <H2> Gastos </H2>
-  <table class="table table-striped table-bordered nowrap datatable-principal" style="width:100%">
-    <thead>
-      <tr>
-        <th>Codigo</th>
-        <th>Concepto</th>
-        <th>Fecha</th>
-        <th>Presupuesto Inicial</th>
-        <th>Adición Modificacion Mes</th>
-        <th>Adición Modificacion Acumulado</th>
-        <th>Presupuesto Definitivo</th>
-        <th>Recaudo Mes</th>
-        <th>Recaudo Acumulado</th>
-        <th>Porcentaje Ejecucion</th>
-        <th>Saldo Por Recaudar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% gastos&.each do |presupuesto_concepto| %>
-      <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
-      <tr>
-        <td><%= presupuesto_concepto.concepto_codigo %></td>
-        <td><%= presupuesto_concepto.concepto_nombre %></td>
-        <td><%= I18n.localize(fecha_formato, format: '%Y') %></td>
-        <td><%= presupuesto_concepto.presupuesto_inicial %></td>
-        <td><%= presupuesto_concepto.adicion_modificacion_mes %></td>
-        <td><%= presupuesto_concepto.adicion_modificacion_acumulado %></td>
-        <td><%= presupuesto_concepto.presupuesto_definitivo %></td>
-        <td><%= presupuesto_concepto.recaudo_mes %></td>
-        <td><%= presupuesto_concepto.recaudo_acumulado %></td>
-        <td><%= presupuesto_concepto.ejecucion * 100 rescue 0 %> %</td>
-        <td><%= presupuesto_concepto.saldo_por_recaudar %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
   <H2> Ingresos </H2>
   <table class="table table-striped table-bordered nowrap datatable-principal" style="width:100%">
     <thead>
@@ -75,18 +39,56 @@
     <tbody>
       <% ingresos&.each do |presupuesto_concepto| %>
       <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
+      <% ejecucion = (presupuesto_concepto.ejecucion * 100).round(2) rescue 0 %>
       <tr>
         <td><%= presupuesto_concepto.concepto_codigo %></td>
         <td><%= presupuesto_concepto.concepto_nombre %></td>
         <td><%= I18n.localize(fecha_formato, format: '%Y') %></td>
-        <td><%= presupuesto_concepto.presupuesto_inicial %></td>
-        <td><%= presupuesto_concepto.adicion_modificacion_mes %></td>
-        <td><%= presupuesto_concepto.adicion_modificacion_acumulado %></td>
-        <td><%= presupuesto_concepto.presupuesto_definitivo %></td>
-        <td><%= presupuesto_concepto.recaudo_mes %></td>
-        <td><%= presupuesto_concepto.recaudo_acumulado %></td>
-        <td><%= presupuesto_concepto.ejecucion * 100 rescue 0 %> %</td>
-        <td><%= presupuesto_concepto.saldo_por_recaudar %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.presupuesto_inicial).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.adicion_modificacion_mes).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.adicion_modificacion_acumulado).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.presupuesto_definitivo).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.recaudo_mes).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.recaudo_acumulado).call %></td>
+        <td><%= ejecucion %> %</td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.saldo_por_recaudar).call %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <H2> Gastos </H2>
+  <table class="table table-striped table-bordered nowrap datatable-principal" style="width:100%">
+    <thead>
+      <tr>
+        <th>Codigo</th>
+        <th>Concepto</th>
+        <th>Fecha</th>
+        <th>Presupuesto Inicial</th>
+        <th>Adición Modificacion Mes</th>
+        <th>Adición Modificacion Acumulado</th>
+        <th>Presupuesto Definitivo</th>
+        <th>Recaudo Mes</th>
+        <th>Recaudo Acumulado</th>
+        <th>Porcentaje Ejecucion</th>
+        <th>Saldo Por Recaudar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% gastos&.each do |presupuesto_concepto| %>
+      <% fecha_formato = Date.parse(presupuesto_concepto.periodo_fecha.to_s) %>
+      <% ejecucion = (presupuesto_concepto.ejecucion * 100).round(2) rescue 0 %>
+      <tr>
+        <td><%= presupuesto_concepto.concepto_codigo %></td>
+        <td><%= presupuesto_concepto.concepto_nombre %></td>
+        <td><%= I18n.localize(fecha_formato, format: '%Y') %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.presupuesto_inicial).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.adicion_modificacion_mes).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.adicion_modificacion_acumulado).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.presupuesto_definitivo).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.recaudo_mes).call %></td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.recaudo_acumulado).call %></td>
+        <td><%= ejecucion %> %</td>
+        <td><%= FormatNumberService.new(presupuesto_concepto.saldo_por_recaudar).call %></td>
       </tr>
       <% end %>
     </tbody>
@@ -126,7 +128,10 @@ $(document).ready(function() {
             ],
             className: 'btn rounded-pill dropdown-toggle'
         }
-    ]
+    ],
+    createdRow: function(row, data, dataIndex) {
+      $('td', row).slice(2).addClass('text-right');
+    }
   });
 });
 $(document).ready(function() {
@@ -136,3 +141,8 @@ $(document).ready(function() {
   });
 });
 </script>
+<style>
+  .text-right {
+    text-align: right;
+  }
+</style>

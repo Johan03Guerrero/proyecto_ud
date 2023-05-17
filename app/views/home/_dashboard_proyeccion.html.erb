@@ -1,5 +1,6 @@
 <% params[:inflacion] ||= 0 %>
 <% params[:ipc] ||= 0 %>
+<% params[:adc_coyuntural] ||= 0 %>
 <div class="div-principal">
   <div class="d-flex justify-content-center">
     <%= form_with(url: root_path, method: :get) do |f| %>
@@ -15,6 +16,8 @@
         <%= f.number_field :inflacion, value: params[:inflacion] %>
         <label for="select2" class="px-4">IPC (%):</label>
         <%= f.number_field :ipc, value: params[:ipc] %>
+        <label for="select2" class="px-4">Adición Coyuntural:</label>
+        <%= f.number_field :adc_coyuntural, value: params[:adc_coyuntural] %>
       </div>
       <div class="d-flex align-items-center my-5 flex-wrap">
         <div class="px-1">
@@ -23,41 +26,8 @@
       </div>
     <% end %>
   </div>
-  <% if params[:years].present? && params[:inflacion].present? && params[:ipc].present? %>
-    <% data_proyeccion = EstimatedProjectionService.new(@compact_data, params[:inflacion].to_f, params[:ipc].to_f).call %>
-    <% labels = data_proyeccion[:labels].to_json %>
-    <% series = [{name: "serie_proyeccion", data: data_proyeccion[:series]}].to_json %>
-    <% result_complete = data_proyeccion[:result_complete] %>
-    <div>
-      <H2> Estimación de Rubros(GASTOS) para la siguiente Vigencia </H2>
-      <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
-        <thead>
-          <tr>
-            <th>Concepto</th>
-            <th>Proyeccion</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% result_complete.each do |data| %>
-            <tr>
-              <% data.each do |column| %>
-                <td> <%= column %> </td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div 
-        data-controller="chart-data-variacion"
-        data-chart-data-variacion-labels-value="<%= labels %>"
-        data-chart-data-variacion-series-value="<%= series %>"
-        data-chart-data-variacion-title-value="Estimación de Rubros Gráfica"
-      >
-        <div data-target="chart-data-variacion.chart"></div>
-      </div>
-    </div>
-
-    <% data_proyeccion_ingresos = EstimatedProjectionService.new(@compact_data_ingresos, params[:inflacion].to_f, params[:ipc].to_f).call %>
+  <% if params[:years].present? && params[:inflacion].present? && params[:ipc].present? && params[:adc_coyuntural].present? %>
+    <% data_proyeccion_ingresos = EstimatedProjectionService.new(@compact_data_ingresos, params[:inflacion].to_f, params[:ipc].to_f, params[:adc_coyuntural].to_f).call %>
     <% labels_ingresos = data_proyeccion_ingresos[:labels].to_json %>
     <% series_ingresos = [{name: "serie_proyeccion", data: data_proyeccion_ingresos[:series]}].to_json %>
     <% result_complete_ingresos = data_proyeccion_ingresos[:result_complete] %>
@@ -73,8 +43,8 @@
         <tbody>
           <% result_complete_ingresos.each do |data| %>
             <tr>
-              <% data.each do |column| %>
-                <td> <%= column %> </td>
+              <% data.each_with_index do |column, index| %>
+                <td> <%=  index > 0 ? FormatNumberService.new(column).call : column %> </td>
               <% end %>
             </tr>
           <% end %>
@@ -89,6 +59,40 @@
         <div data-target="chart-data-variacion.chart"></div>
       </div>
     </div>
+
+    <% data_proyeccion = EstimatedProjectionService.new(@compact_data, params[:inflacion].to_f, params[:ipc].to_f, params[:adc_coyuntural].to_f).call %>
+    <% labels = data_proyeccion[:labels].to_json %>
+    <% series = [{name: "serie_proyeccion", data: data_proyeccion[:series]}].to_json %>
+    <% result_complete = data_proyeccion[:result_complete] %>
+    <div>
+      <H2> Estimación de Rubros(GASTOS) para la siguiente Vigencia </H2>
+      <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Proyeccion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% result_complete.each do |data| %>
+            <tr>
+              <% data.each_with_index do |column, index| %>
+                <td> <%=  index > 0 ? FormatNumberService.new(column).call : column %> </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div 
+        data-controller="chart-data-variacion"
+        data-chart-data-variacion-labels-value="<%= labels %>"
+        data-chart-data-variacion-series-value="<%= series %>"
+        data-chart-data-variacion-title-value="Estimación de Rubros Gráfica"
+      >
+        <div data-target="chart-data-variacion.chart"></div>
+      </div>
+    </div>
+
   <% end %>
 </div>
 <script>
@@ -125,7 +129,16 @@ $(document).ready(function() {
             ],
             className: 'btn rounded-pill dropdown-toggle'
         }
-    ]
+    ],
+    createdRow: function(row, data, dataIndex) {
+      $('td', row).slice(1).addClass('text-right');
+    }
   });
 });
 </script>
+<style>
+  .text-right {
+    text-align: right;
+  }
+</style>
+

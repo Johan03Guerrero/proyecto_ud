@@ -38,23 +38,6 @@
           <h4>
             Año: <%= year %>
           </h4>
-          <% if json_pie.present? %>
-            <% data_years << json_pie %>
-            <% years_with_data << year %>
-            <H3> Gastos </H3>
-            <div 
-              data-controller="charts-apex-donut"
-              data-charts-apex-donut-labels-value="<%= labels %>"
-              data-charts-apex-donut-series-value="<%= series %>"
-              class="d-flex justify-content-center"
-            >
-              <div data-target="charts-apex-donut.chart"></div>
-            </div>
-          <% else %>
-            <span class="my-4">
-              No hay datos de gastos para este año
-            </span>
-          <% end %>
           <% if json_pie_ingresos.present? %>
             <% data_years_ingresos << json_pie_ingresos %>
             <% years_with_data_ingresos << year %>
@@ -72,46 +55,27 @@
               No hay datos de ingresos para este año
             </span>
           <% end %>
+          <% if json_pie.present? %>
+            <% data_years << json_pie %>
+            <% years_with_data << year %>
+            <H3> Gastos </H3>
+            <div 
+              data-controller="charts-apex-donut"
+              data-charts-apex-donut-labels-value="<%= labels %>"
+              data-charts-apex-donut-series-value="<%= series %>"
+              class="d-flex justify-content-center"
+            >
+              <div data-target="charts-apex-donut.chart"></div>
+            </div>
+          <% else %>
+            <span class="my-4">
+              No hay datos de gastos para este año
+            </span>
+          <% end %>
         </div>
       <% end %>
       <div>
         <H2> Comparativo Presupuesto Inicial de Funcionamiento </H2>
-        <% if years.count > 1 && data_years.present? && data_years.count > 1 %>
-          <% @compact_data = DataVariacion.new(data_years, years_with_data, "gastos").call %>
-          <H3> Gastos </H3>
-          <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
-            <thead>
-              <tr>
-                <th>Concepto</th>
-                <th>Var %</th>
-                <% years_with_data.each do |year|%>
-                  <th><%= "PRESUPUESTO INICIAL #{year}" %></th>
-                <% end %>
-              </tr>
-            </thead>
-            <tbody>
-              <% @compact_data.each do |data| %>
-                <tr>
-                  <% data.each do |column| %>
-                    <td> <%= column %> </td>
-                  <% end %>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% data_chart_variacion = DataVariacionChart.new(@compact_data, years_with_data).call %>
-        <% labels = data_chart_variacion[:labels].to_json %>
-        <% series = data_chart_variacion[:series].to_json %>
-        <% serie_variacion = data_chart_variacion[:serie_variacion].to_json %>
-        <div 
-          data-controller="chart-data-variacion"
-          data-chart-data-variacion-labels-value="<%= labels %>"
-          data-chart-data-variacion-series-value="<%= series %>"
-          data-chart-data-variacion-title-value="Compartivo Gráfica"
-        >
-          <div data-target="chart-data-variacion.chart"></div>
-        </div>
-        <% end %>
         <% if years.count > 1 && data_years_ingresos.present? && data_years_ingresos.count > 1 %>
           <% @compact_data_ingresos = DataVariacion.new(data_years_ingresos, years_with_data_ingresos, "ingresos").call %>
           <H3> Ingresos </H3>
@@ -128,25 +92,61 @@
             <tbody>
               <% @compact_data_ingresos.each do |data| %>
                 <tr>
-                  <% data.each do |column| %>
-                    <td> <%= column %> </td>
+                  <% data.each_with_index do |column, index| %>
+                    <td> <%=  (index > 1 ? FormatNumberService.new(column).call : column) rescue 0 %> </td>
                   <% end %>
                 </tr>
               <% end %>
             </tbody>
           </table>
-        <% data_chart_variacion_ingresos = DataVariacionChart.new(@compact_data_ingresos, years_with_data_ingresos).call %>
-        <% labels_ingresos = data_chart_variacion_ingresos[:labels].to_json %>
-        <% series_ingresos = data_chart_variacion_ingresos[:series].to_json %>
-        <% serie_variacion_ingresos = data_chart_variacion_ingresos[:serie_variacion].to_json %>
-        <div 
-          data-controller="chart-data-variacion"
-          data-chart-data-variacion-labels-value="<%= labels_ingresos %>"
-          data-chart-data-variacion-series-value="<%= series_ingresos %>"
-          data-chart-data-variacion-title-value="Compartivo Gráfica"
-        >
-          <div data-target="chart-data-variacion.chart"></div>
-        </div>
+          <% data_chart_variacion_ingresos = DataVariacionChart.new(@compact_data_ingresos, years_with_data_ingresos).call %>
+          <% labels_ingresos = data_chart_variacion_ingresos[:labels].to_json %>
+          <% series_ingresos = data_chart_variacion_ingresos[:series].to_json %>
+          <% serie_variacion_ingresos = data_chart_variacion_ingresos[:serie_variacion].to_json %>
+          <div 
+            data-controller="chart-data-variacion"
+            data-chart-data-variacion-labels-value="<%= labels_ingresos %>"
+            data-chart-data-variacion-series-value="<%= series_ingresos %>"
+            data-chart-data-variacion-title-value="Compartivo Gráfica"
+          >
+            <div data-target="chart-data-variacion.chart"></div>
+          </div>
+        <% end %>
+        <% if years.count > 1 && data_years.present? && data_years.count > 1 %>
+          <% @compact_data = DataVariacion.new(data_years, years_with_data, "gastos").call %>
+          <H3> Gastos </H3>
+          <table class="table table-striped table-bordered nowrap datatable-dashboard" style="width:100%">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Var %</th>
+                <% years_with_data.each do |year|%>
+                  <th><%= "PRESUPUESTO INICIAL #{year}" %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% @compact_data.each do |data| %>
+                <tr>
+                  <% data.each_with_index do |column, index| %>
+                    <td> <%=  (index > 1 ? FormatNumberService.new(column).call : column) rescue 0 %> </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <% data_chart_variacion = DataVariacionChart.new(@compact_data, years_with_data).call %>
+          <% labels = data_chart_variacion[:labels].to_json %>
+          <% series = data_chart_variacion[:series].to_json %>
+          <% serie_variacion = data_chart_variacion[:serie_variacion].to_json %>
+          <div 
+            data-controller="chart-data-variacion"
+            data-chart-data-variacion-labels-value="<%= labels %>"
+            data-chart-data-variacion-series-value="<%= series %>"
+            data-chart-data-variacion-title-value="Compartivo Gráfica"
+          >
+            <div data-target="chart-data-variacion.chart"></div>
+          </div>
         <% end %>
       </div>
     <% end %>
@@ -193,8 +193,16 @@ $(document).ready(function() {
             ],
             className: 'btn rounded-pill dropdown-toggle'
         }
-    ]
+    ],
+    createdRow: function(row, data, dataIndex) {
+      $('td', row).slice(1).addClass('text-right');
+    }
   });
 });
 </script>
+<style>
+  .text-right {
+    text-align: right;
+  }
+</style>
 
