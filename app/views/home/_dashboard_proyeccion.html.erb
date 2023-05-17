@@ -44,7 +44,7 @@
           <% result_complete_ingresos.each do |data| %>
             <tr>
               <% data.each_with_index do |column, index| %>
-                <td> <%=  index > 0 ? FormatNumberService.new(column).call : column %> </td>
+                <td> <%=  index > 0 ? FormatNumberService.new(column.round(2)).call : column %> </td>
               <% end %>
             </tr>
           <% end %>
@@ -77,7 +77,7 @@
           <% result_complete.each do |data| %>
             <tr>
               <% data.each_with_index do |column, index| %>
-                <td> <%=  index > 0 ? FormatNumberService.new(column).call : column %> </td>
+                <td> <%=  index > 0 ? FormatNumberService.new(column.round(2)).call : column %> </td>
               <% end %>
             </tr>
           <% end %>
