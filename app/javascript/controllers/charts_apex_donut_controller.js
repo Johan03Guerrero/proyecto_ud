@@ -17,7 +17,6 @@ export default class extends Controller {
 
   get chartOptions() {
     const colorList = [
-      "#FFB6C1",
       "#4682B4",
       "#FF8C00",
       "#696969",
@@ -31,6 +30,7 @@ export default class extends Controller {
       "#4169E1",
       "#8B0000",
       "#008B8B",
+      "#FFB6C1",
       "#483D8B",
       "#00CED1",
       "#B22222",
