@@ -5,8 +5,8 @@
 <% params[:fecha_fin] ||= periodos.last %>
 <% list_cols = [["Presupuesto Inicial", "presupuesto_inicial"], ["Adición Modificación Mes", "adicion_modificacion_mes"], 
                 ["Adición Modificación Acumulado", "adicion_modificacion_acumulado"], ["Presupuesto Definitivo", "presupuesto_definitivo"],
-                ["Recaudo Mes", "recaudo_mes"], ["Recaudo Acumulado", "recaudo_acumulado"],
-                ["Ejecución", "ejecucion"], ["Saldo Por Recaudar", "saldo_por_recaudar"]
+                ["Recaudo/Compromisos Mes", "recaudo_mes"], ["Recaudo/Compromisos Acumulado", "recaudo_acumulado"],
+                ["Ejecución", "ejecucion"], ["Saldo Por Recaudar/Ejecutar", "saldo_por_recaudar"]
                ] 
 %>
 <% params[:col_1] ||=  list_cols.first %>

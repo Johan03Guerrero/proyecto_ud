@@ -7,6 +7,7 @@ export default class extends Controller {
   static values = {
     labels: Array,
     series: Array,
+    width: Number,
   }
 
   initialize() {
@@ -16,21 +17,31 @@ export default class extends Controller {
 
   get chartOptions() {
     const colorList = [
-      "#008FFB",
-      "#00E396",
-      "#FEB019",
-      "#FF4560",
-      "#775DD0",
-      "#3f51b5",
-      "#03a9f4",
-      "#4caf50",
-      "#f9ce1d",
-      "#FF9800"
+      "#FFB6C1",
+      "#4682B4",
+      "#FF8C00",
+      "#696969",
+      "#FF3700",
+      "#008080",
+      "#8A2BE2",
+      "#556B2F",
+      "#800080",
+      "#006400",
+      "#FF0F7A",
+      "#4169E1",
+      "#8B0000",
+      "#008B8B",
+      "#483D8B",
+      "#00CED1",
+      "#B22222",
+      "#2F4F4F",
+      "#008000",
+      "#CD853F"
     ];
     return {
       series: this.seriesValue,
       chart: {
-        width: 950,
+        width: this.widthValue,
         type: 'pie',
       },
       colors: colorList,
@@ -39,7 +50,7 @@ export default class extends Controller {
         breakpoint: 480,
         options: {
           chart: {
-            width: 780
+            width: this.widthValue/1.2
           },
           legend: {
             position: 'start',
@@ -51,12 +62,12 @@ export default class extends Controller {
         textAnchor: 'start',
         formatter: function (val, opt) {
           const label = opt.w.globals.labels[opt.seriesIndex];
-          const serieValue = opt.w.globals.seriesTotals[opt.seriesIndex];
+          const serieValue = opt.w.globals.seriesTotals[opt.seriesIndex].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           const value = Math.round(val * 100) / 100;
           return [`${value}%`, label, `$ ${serieValue}`];
         },
         style: {
-          fontSize: '11px',
+          fontSize: '9px',
           fontFamily: 'Helvetica, Arial, sans-serif',
           fontWeight: 'bold',
           colors: ['#fff']
@@ -65,7 +76,7 @@ export default class extends Controller {
         offsetY: 0,
       },
       legend: {
-        fontSize: '16px',
+        fontSize: '14px',
       }
     };
   }
