@@ -118,7 +118,7 @@ Una vez realizado el registro del usuario, inicializar el servidor local.
 <img src="https://user-images.githubusercontent.com/40550092/232258279-8a2dfa49-47ca-483b-84ab-2513adce51c3.png"
    alt="iniciar_sesion" width="980" height="140">
 
-  * Opción App Ud Presupuestos: Esta opción lleva al inicio de la aplicación, en esta sección estará la tabla general con la información de todos los archivos cargados en el aplicativo. Esta sección cuenta con unos filtros por fecha. Así como la posibilidad de descargar la información en csv, pdf, excel o copiar la información. 
+  * Opción App UD Presupuestos: Esta opción lleva al inicio de la aplicación, en esta sección estará la tabla general con la información de todos los archivos cargados en el aplicativo. Esta sección cuenta con unos filtros por fecha. Así como la posibilidad de descargar la información en csv, pdf, excel o copiar la información. 
 
 <img src="https://user-images.githubusercontent.com/40550092/232259157-88c1b349-4999-4a1a-b85b-352ed3308ed5.png"
    alt="home" width="980" height="440">
